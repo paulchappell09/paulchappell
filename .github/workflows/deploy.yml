@@ -1,0 +1,15 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy app
+        env:
+          PAGES_DEPLOY_HOOK: ${{ secrets.CloudflarePagesDeployHook }}
+        run: curl -X POST "https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/$PAGES_DEPLOY_HOOK"
